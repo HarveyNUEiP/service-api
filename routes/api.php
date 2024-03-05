@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth.jwt', 'validate.user.status'])->group(function () {
+    Route::get('/profile', \App\Http\Controllers\api\ProfileController::class . '@index');
+
+    /**
+     * Account Management
+     */
+    Route::group(['prefix' => 'accountManagement'], function () {
+        Route::group(['middleware' => 'permission:accountManagement.view'], function () {
+            Route::get('/', [\App\Http\Controllers\api\AccountManagementController::class, 'index'])
+                ->name('account.viewAny');
+            Route::get('/{id}', [\App\Http\Controllers\api\AccountManagementController::class, 'show'])
+                ->name('account.view');
+        });
+        Route::put('/{id}', [\App\Http\Controllers\api\AccountManagementController::class, 'update'])
+            ->name('account.update')
+            ->middleware('permission:accountManagement.update');
+    });
+
+    Route::get('syncAccount', [\App\Http\Controllers\api\AccountSyncController::class, 'index'])
+        ->name('account.sync')
+        ->middleware('role:admin');
 });

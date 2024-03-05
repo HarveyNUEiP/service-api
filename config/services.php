@@ -31,4 +31,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'hrm' => [
+        'base_uri' => env('HRM_API_BASE'),
+        'api_user' => env('HRM_API_USER'),
+        'api_pass' => env('HRM_API_PASS'),
+        'verify' => env('APP_ENV') === 'production'
+    ],
+
+    'nueip' => [
+        'base_uri' => env('NUEIP_SITE_ENDPOINT'),
+    ],
+
 ];
