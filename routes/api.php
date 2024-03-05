@@ -13,12 +13,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth.jwt', 'validate.user.status'])->group(function () {
-    Route::get('/profile', \App\Http\Controllers\api\ProfileController::class . '@index');
+/**
+ * Profile
+ */
+Route::get('/profile', \App\Http\Controllers\api\ProfileController::class . '@index');
 
+/**
+ * Two Factor Authentication
+ */
+Route::get('tfa', \App\Http\Controllers\api\TwoFactorAuthController::class . '@getQRcode')
+    ->name('twoFactorAuth.show');
+Route::post('tfa', \App\Http\Controllers\api\TwoFactorAuthController::class . '@bind')
+    ->name('twoFactorAuth.store');
+Route::post('tfa/verify', \App\Http\Controllers\api\TwoFactorAuthController::class . '@verify')
+    ->name('twoFactorAuth.verify');
+Route::delete('tfa/{id}', \App\Http\Controllers\api\TwoFactorAuthController::class . '@unbind')
+    ->name('twoFactorAuth.unbind');
+
+Route::middleware(['verify.tfa'])->group(function () {
     /**
-     * Account Management
-     */
+    * Account Management
+    */
     Route::group(['prefix' => 'accountManagement'], function () {
         Route::group(['middleware' => 'permission:accountManagement.view'], function () {
             Route::get('/', [\App\Http\Controllers\api\AccountManagementController::class, 'index'])
