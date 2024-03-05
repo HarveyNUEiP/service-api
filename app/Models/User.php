@@ -33,6 +33,8 @@ class User extends Authenticatable
         'chinese_name',
         'english_name',
         'email',
+        'shared_secret',
+        'last_tfa_verification_at',
         'created_at',
         'created_by',
         'updated_at',

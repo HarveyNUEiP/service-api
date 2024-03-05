@@ -13,6 +13,7 @@ class ServiceServiceProvider extends ServiceProvider
     {
         $this->app->bind(\App\Services\Contracts\AccountManagementService::class, \App\Services\AccountManagementService::class);
         $this->app->bind(\App\Services\Contracts\RoleBasedAccessControlService::class, \App\Services\RoleBasedAccessControlService::class);
+        $this->app->bind(\App\Services\Contracts\TwoFactorAuthService::class, \App\Services\TwoFactorAuthService::class);
     }
 
     /**
